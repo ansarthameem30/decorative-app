@@ -36,6 +36,16 @@ export interface ProposalPillar {
   description: string;
 }
 
+export interface FutureLetter {
+  id: string;
+  roman: string;
+  tag: string;
+  year: string;
+  milestone: string;
+  excerpt: string;
+  fullLetter: string;
+}
+
 export interface ProposalConfig {
   herName: string;
   yourName: string;
@@ -48,6 +58,8 @@ export interface ProposalConfig {
   celebrationTitle: string;
   celebrationMessage: string;
   whatsappPhone?: string;
+  bgmUrl?: string;
+  futureLetters?: FutureLetter[];
   resonanceFrequencies?: ResonanceFrequency[];
   pillars?: ProposalPillar[];
 }

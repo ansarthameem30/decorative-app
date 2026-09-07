@@ -165,6 +165,47 @@ export const defaultProposalConfig: ProposalConfig = {
     }
   ],
 
+  bgmUrl: "https://assets.mixkit.co/music/preview/mixkit-serene-view-443.mp3",
+
+  futureLetters: [
+    {
+      id: "letter-1",
+      roman: "I",
+      tag: "THE FIRST YEAR · 2027",
+      year: "Year One",
+      milestone: "When The Newness Turns Into Deep Comfort",
+      excerpt: "Looking back at the moment you said yes, knowing this was only the sweet beginning.",
+      fullLetter: "Can we promise that one year from today, we will look back at this exact proposal and smile, realizing that choosing each other was the easiest and sweetest decision of our lives? I want to spend these next 365 days memorizing every expression you make, discovering your favorite foods, and learning how to love you better with every passing sunrise."
+    },
+    {
+      id: "letter-2",
+      roman: "II",
+      tag: "OUR SACRED HAVEN · 2030",
+      year: "Our First Home",
+      milestone: "When We Unlock Our Own Front Door",
+      excerpt: "Sunday morning coffee in our own kitchen, sunlight spilling across the floor.",
+      fullLetter: "Can we picture it? Sunday mornings with sunlight spilling across our wooden floor, the kettle whistling on the stove, and soft music playing while you laugh as I try to cook. More than any grand mansion, I want to build a haven with you where your heart can kick off its shoes, exhale, and know it is completely, unconditionally safe."
+    },
+    {
+      id: "letter-3",
+      roman: "III",
+      tag: "OUR ANCHOR IN THE STORM",
+      year: "When Seasons Change",
+      milestone: "To Read Whenever The World Feels Heavy",
+      excerpt: "You will never have to face an exhausting day or cold winter alone again.",
+      fullLetter: "If life ever brings a season of heavy clouds, quiet doubts, or exhausting work, open this letter to remember: you will never face anything alone again. I promise to be your calm harbor, to hold your hand under the blankets, and to remind you how deeply you are cherished until the storm passes."
+    },
+    {
+      id: "letter-4",
+      roman: "IV",
+      tag: "OUR SILVER DECADES · FOREVER",
+      year: "Decades Ahead",
+      milestone: "When Our Hair Has Streaks of Gray",
+      excerpt: "Sitting together on a quiet porch, smiling at a lifetime of laughter.",
+      fullLetter: "When decades have passed and we sit side-by-side watching the purple twilight, I know my heart will still race every time you smile. Borahae isn't just a promise for our youth—it is my lifelong vow that across every year, every laugh line, and every sunset, I will choose you and love you more than the day before."
+    }
+  ],
+
   resonanceFrequencies: [
     {
       frequency: 432,

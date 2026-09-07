@@ -8,7 +8,7 @@ import { StoryTimeline } from '@/components/proposal/StoryTimeline';
 import { StarlightMiniGame } from '@/components/proposal/StarlightMiniGame';
 import { WishingSkySection } from '@/components/proposal/WishingSkySection';
 import { InteractiveReasons } from '@/components/proposal/InteractiveReasons';
-import { MemoryResonance } from '@/components/proposal/MemoryResonance';
+import { TimeCapsuleSection } from '@/components/proposal/TimeCapsuleSection';
 import { PillarsOfTomorrow } from '@/components/proposal/PillarsOfTomorrow';
 import { ProposalQuestion } from '@/components/proposal/ProposalQuestion';
 import { CelebrationModal } from '@/components/proposal/CelebrationModal';
@@ -85,6 +85,9 @@ export default function ProposalMainPage() {
         const data = await res.json();
         if (data.config) {
           setConfig(data.config);
+          if (data.config.bgmUrl) {
+            audioEngine.setCustomAudioUrl(data.config.bgmUrl);
+          }
         }
       } catch (err) {
         console.warn('Could not fetch from API, using default content:', err);
@@ -206,9 +209,9 @@ export default function ProposalMainPage() {
           />
         </div>
 
-        {/* Chapter 06: [NEW] Memory Resonance & Frequency Tuner */}
+        {/* Chapter 06: The Time Capsule of Our Tomorrows */}
         <div className="w-full">
-          <MemoryResonance />
+          <TimeCapsuleSection letters={config.futureLetters} />
         </div>
 
         {/* Chapter 07: [NEW] The Pillars of Our Tomorrow */}

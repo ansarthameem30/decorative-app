@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { ProposalConfig } from '@/types/proposal';
 import { defaultProposalConfig } from '@/config/proposalContent';
 import { compressImageFile } from '@/utils/proposalShare';
+import { audioEngine, DEFAULT_ROMANTIC_BALLAD, FALLBACK_ROMANTIC_BALLAD } from '@/services/audioEngine';
 
 const PRESET_PHOTOS = [
   { label: 'Starry Night', url: 'https://images.unsplash.com/photo-1518199266791-5375a83190b7?q=80&w=1000&auto=format&fit=crop' },
@@ -22,9 +23,10 @@ export default function AdminPage() {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [saveStatus, setSaveStatus] = useState<{ type: 'success' | 'error'; message: string } | null>(null);
-  const [activeTab, setActiveTab] = useState<'couple' | 'milestones' | 'stars' | 'reasons' | 'sql'>('couple');
+  const [activeTab, setActiveTab] = useState<'couple' | 'milestones' | 'letters' | 'stars' | 'reasons' | 'sql'>('couple');
   const [uploadingIdx, setUploadingIdx] = useState<number | null>(null);
   const [copiedSql, setCopiedSql] = useState(false);
+  const [isPlayingAudio, setIsPlayingAudio] = useState(false);
 
   // Check saved session auth
   useEffect(() => {
@@ -303,6 +305,7 @@ FROM public.proposal_config;`;
           {[
             { id: 'couple', label: 'Couple & Vows', icon: '💜' },
             { id: 'milestones', label: 'Chapters & Photos', icon: '📷' },
+            { id: 'letters', label: 'Time Capsule', icon: '⏳' },
             { id: 'stars', label: '7 Stars', icon: '⭐' },
             { id: 'reasons', label: 'Love Reasons', icon: '💌' },
             { id: 'sql', label: 'Supabase SQL', icon: '⚡' },
@@ -408,6 +411,63 @@ FROM public.proposal_config;`;
                   className="w-full p-3.5 rounded-xl bg-[#16062a] border border-purple-500/30 text-white text-base sm:text-sm resize-none focus:border-pink-400 focus:outline-none"
                   placeholder="Personal vow inside the keepsake modal..."
                 />
+              </div>
+
+              {/* Background Music Audio Stream */}
+              <div className="p-4 rounded-2xl bg-purple-950/40 border border-purple-400/30 space-y-3">
+                <div className="flex items-center justify-between">
+                  <label className="block text-purple-200 text-xs font-heading uppercase font-semibold">
+                    🎵 Background Music (Acoustic Piano Ballad)
+                  </label>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      if (config.bgmUrl) {
+                        audioEngine.setCustomAudioUrl(config.bgmUrl);
+                      }
+                      const active = audioEngine.toggleAudio();
+                      setIsPlayingAudio(active);
+                    }}
+                    className="text-xs px-3 py-1 rounded-full bg-pink-600/30 hover:bg-pink-600/50 border border-pink-400/50 text-pink-200 flex items-center gap-1.5 transition-all"
+                  >
+                    <span>{isPlayingAudio ? '⏸ Pause' : '▶ Preview Music'}</span>
+                  </button>
+                </div>
+                <input
+                  type="url"
+                  value={config.bgmUrl || ''}
+                  onChange={(e) => {
+                    const url = e.target.value;
+                    setConfig({ ...config, bgmUrl: url });
+                    audioEngine.setCustomAudioUrl(url);
+                  }}
+                  placeholder="Direct MP3 Audio Stream URL"
+                  className="w-full p-3.5 rounded-xl bg-[#16062a] border border-purple-500/30 text-white text-base sm:text-sm focus:border-pink-400 focus:outline-none"
+                />
+                <div className="flex flex-wrap gap-2 text-[11px]">
+                  <span className="text-purple-400/80">Presets:</span>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setConfig({ ...config, bgmUrl: DEFAULT_ROMANTIC_BALLAD });
+                      audioEngine.setCustomAudioUrl(DEFAULT_ROMANTIC_BALLAD);
+                    }}
+                    className="text-pink-300 hover:underline"
+                  >
+                    Default Romantic Piano
+                  </button>
+                  <span className="text-purple-600">·</span>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setConfig({ ...config, bgmUrl: FALLBACK_ROMANTIC_BALLAD });
+                      audioEngine.setCustomAudioUrl(FALLBACK_ROMANTIC_BALLAD);
+                    }}
+                    className="text-pink-300 hover:underline"
+                  >
+                    Tender Acoustic Piano
+                  </button>
+                </div>
               </div>
 
               {/* Entrance Gate Testing Action */}
@@ -599,7 +659,81 @@ FROM public.proposal_config;`;
             </div>
           )}
 
-          {/* TAB 3: 7 Stars of Us (Chapter 03) */}
+          {/* TAB 3: Time Capsule Letters (Chapter 06) */}
+          {activeTab === 'letters' && (
+            <div className="space-y-4">
+              <div className="p-3.5 rounded-2xl bg-purple-950/40 border border-purple-400/30">
+                <p className="text-xs text-purple-200 leading-relaxed">
+                  ⏳ <strong>Chapter 06 Time Capsule:</strong> Inscribe the 4 royal wax-sealed letters addressed to your future milestones. She will unseal each letter one-by-one with golden starlight!
+                </p>
+              </div>
+
+              {(config.futureLetters || defaultProposalConfig.futureLetters || []).map((letter, idx) => (
+                <div key={letter.id} className="p-4 sm:p-5 rounded-2xl bg-[#140528] border border-purple-500/25 space-y-3">
+                  <div className="flex items-center justify-between border-b border-purple-500/20 pb-2">
+                    <span className="font-heading text-xs font-semibold uppercase text-pink-300">
+                      Letter {letter.roman} · {letter.year}
+                    </span>
+                    <span className="text-xs text-purple-300/80 font-medium">{letter.tag}</span>
+                  </div>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div>
+                      <label className="block text-[11px] text-purple-300 uppercase mb-1 font-medium">
+                        Milestone Title
+                      </label>
+                      <input
+                        type="text"
+                        value={letter.milestone}
+                        onChange={(e) => {
+                          const currentLetters = config.futureLetters || defaultProposalConfig.futureLetters || [];
+                          const updated = [...currentLetters];
+                          updated[idx] = { ...updated[idx], milestone: e.target.value };
+                          setConfig({ ...config, futureLetters: updated });
+                        }}
+                        className="w-full p-3 rounded-xl bg-[#190730] border border-purple-500/30 text-white text-base sm:text-xs"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-[11px] text-purple-300 uppercase mb-1 font-medium">
+                        Year / Phase Label
+                      </label>
+                      <input
+                        type="text"
+                        value={letter.year}
+                        onChange={(e) => {
+                          const currentLetters = config.futureLetters || defaultProposalConfig.futureLetters || [];
+                          const updated = [...currentLetters];
+                          updated[idx] = { ...updated[idx], year: e.target.value };
+                          setConfig({ ...config, futureLetters: updated });
+                        }}
+                        className="w-full p-3 rounded-xl bg-[#190730] border border-purple-500/30 text-white text-base sm:text-xs"
+                      />
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className="block text-[11px] text-purple-300 uppercase mb-1 font-medium">
+                      Full Future Vow / Letter Body
+                    </label>
+                    <textarea
+                      rows={3}
+                      value={letter.fullLetter}
+                      onChange={(e) => {
+                        const currentLetters = config.futureLetters || defaultProposalConfig.futureLetters || [];
+                        const updated = [...currentLetters];
+                        updated[idx] = { ...updated[idx], fullLetter: e.target.value };
+                        setConfig({ ...config, futureLetters: updated });
+                      }}
+                      className="w-full p-3 rounded-xl bg-[#190730] border border-purple-500/30 text-white text-base sm:text-xs resize-none"
+                    />
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+
+          {/* TAB 4: 7 Stars of Us (Chapter 03) */}
           {activeTab === 'stars' && (
             <div className="space-y-4">
               <p className="text-xs text-purple-300/80">
