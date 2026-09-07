@@ -29,23 +29,24 @@ class AudioEngine {
     return this.audioCtx;
   }
 
+  private synthInterval: any = null;
+  private isSynthPlaying = false;
+
   private initBgm() {
     if (typeof window === 'undefined') return;
     if (!this.bgmAudio) {
       this.bgmAudio = new Audio();
+      this.bgmAudio.crossOrigin = 'anonymous';
       this.bgmAudio.src = this.customBgmUrl;
       this.bgmAudio.loop = true;
       this.bgmAudio.preload = 'auto';
       this.bgmAudio.volume = 0;
 
-      // Handle loading error with fallback
+      // When external URL fails (e.g. 403 Forbidden or CORS), smoothly fallback to synthesized piano
       this.bgmAudio.onerror = () => {
-        if (this.bgmAudio && this.bgmAudio.src !== FALLBACK_ROMANTIC_BALLAD) {
-          console.warn('Primary ballad stream unavailable, switching to fallback acoustic piano...');
-          this.bgmAudio.src = FALLBACK_ROMANTIC_BALLAD;
-          if (this.isPlaying) {
-            this.bgmAudio.play().catch(() => {});
-          }
+        console.warn('Custom audio URL unavailable. Seamlessly activating pure acoustic piano generator...');
+        if (this.isPlaying) {
+          this.startRomanticPianoSynth();
         }
       };
     }
@@ -61,8 +62,126 @@ class AudioEngine {
       const wasPlaying = this.isPlaying;
       this.bgmAudio.src = cleanUrl;
       if (wasPlaying) {
-        this.bgmAudio.play().catch(() => {});
+        this.stopRomanticPianoSynth();
+        this.bgmAudio.play().catch(() => {
+          this.startRomanticPianoSynth();
+        });
       }
+    }
+  }
+
+  /**
+   * Soothing procedural romantic piano & celestial pad generator
+   * 100% reliable, zero network requests, zero 403 errors, crystal-clear acoustic tone.
+   */
+  private startRomanticPianoSynth() {
+    if (this.isSynthPlaying) return;
+    const ctx = this.getAudioContext();
+    if (!ctx) return;
+
+    this.isSynthPlaying = true;
+
+    // Romantic D Major / A Major / Bm / G chords progression (warm Ludovico Einaudi style)
+    const chords = [
+      // Dmaj7 (Warm & hopeful)
+      [146.83, 220.00, 277.18, 369.99, 440.00], // D3, A3, C#4, F#4, A4
+      // A (Tender & comforting)
+      [110.00, 220.00, 277.18, 329.63, 440.00], // A2, A3, C#4, E4, A4
+      // Bm7 (Deep emotional intimacy)
+      [123.47, 220.00, 293.66, 369.99, 440.00], // B2, A3, D4, F#4, A4
+      // Gmaj7 (Lifelong devotion)
+      [98.00, 196.00, 293.66, 369.99, 493.88],  // G2, G3, D4, F#4, B4
+    ];
+
+    let chordIdx = 0;
+    let step = 0;
+
+    const playStep = () => {
+      if (!this.isSynthPlaying || !this.isPlaying) return;
+      const currentCtx = this.getAudioContext();
+      if (!currentCtx || currentCtx.state === 'suspended') return;
+
+      const chord = chords[chordIdx];
+      const noteFreq = chord[step % chord.length];
+
+      // Play soft acoustic piano note
+      this.playAcousticPianoTone(noteFreq, step === 0 ? 0.12 : 0.08, 3.2);
+
+      step++;
+      if (step >= chord.length * 2) {
+        step = 0;
+        chordIdx = (chordIdx + 1) % chords.length;
+      }
+    };
+
+    // Play first chord immediately
+    playStep();
+    this.synthInterval = setInterval(playStep, 680);
+  }
+
+  private stopRomanticPianoSynth() {
+    this.isSynthPlaying = false;
+    if (this.synthInterval) {
+      clearInterval(this.synthInterval);
+      this.synthInterval = null;
+    }
+  }
+
+  /**
+   * Acoustic piano simulation using dual pure sines + warm lowpass filter + natural exponential decay
+   */
+  private playAcousticPianoTone(freq: number, velocity: number = 0.1, duration: number = 3.0) {
+    const ctx = this.getAudioContext();
+    if (!ctx) return;
+
+    try {
+      const now = ctx.currentTime;
+
+      // Fundamental oscillator
+      const osc1 = ctx.createOscillator();
+      osc1.type = 'sine';
+      osc1.frequency.setValueAtTime(freq, now);
+
+      // Warm harmonic overtone (octave higher, gentle presence)
+      const osc2 = ctx.createOscillator();
+      osc2.type = 'sine';
+      osc2.frequency.setValueAtTime(freq * 2, now);
+
+      // Lowpass acoustic body filter
+      const filter = ctx.createBiquadFilter();
+      filter.type = 'lowpass';
+      filter.frequency.setValueAtTime(1400, now);
+      filter.frequency.exponentialRampToValueAtTime(320, now + duration);
+
+      // Gain envelopes
+      const gain1 = ctx.createGain();
+      gain1.gain.setValueAtTime(0.0001, now);
+      gain1.gain.linearRampToValueAtTime(velocity, now + 0.025); // Gentle soft attack
+      gain1.gain.exponentialRampToValueAtTime(velocity * 0.4, now + 0.35); // Initial strike decay
+      gain1.gain.exponentialRampToValueAtTime(0.0001, now + duration); // Long singing sustain
+
+      const gain2 = ctx.createGain();
+      gain2.gain.setValueAtTime(0.0001, now);
+      gain2.gain.linearRampToValueAtTime(velocity * 0.28, now + 0.02);
+      gain2.gain.exponentialRampToValueAtTime(0.0001, now + (duration * 0.6));
+
+      // Master output gain
+      const masterNoteGain = ctx.createGain();
+      masterNoteGain.gain.setValueAtTime(0.75, now);
+
+      osc1.connect(gain1);
+      osc2.connect(gain2);
+      gain1.connect(filter);
+      gain2.connect(filter);
+      filter.connect(masterNoteGain);
+      masterNoteGain.connect(ctx.destination);
+
+      osc1.start(now);
+      osc2.start(now);
+      osc1.stop(now + duration + 0.1);
+      osc2.stop(now + duration + 0.1);
+    } catch (e) {
+      // AudioContext state safety
     }
   }
 
@@ -95,7 +214,12 @@ class AudioEngine {
    * Smooth volume fade-out
    */
   private fadeOut(durationMs: number = 800, onComplete?: () => void) {
-    if (!this.bgmAudio) return;
+    this.stopRomanticPianoSynth();
+
+    if (!this.bgmAudio) {
+      if (onComplete) onComplete();
+      return;
+    }
     if (this.fadeInterval) clearInterval(this.fadeInterval);
 
     const stepMs = 40;
@@ -120,25 +244,35 @@ class AudioEngine {
   }
 
   public async startAudio(): Promise<boolean> {
+    this.isPlaying = true;
+    const ctx = this.getAudioContext();
+    if (ctx && ctx.state === 'suspended') {
+      await ctx.resume().catch(() => {});
+    }
+
     this.initBgm();
-    this.getAudioContext();
 
-    if (!this.bgmAudio) return false;
-
-    try {
-      await this.bgmAudio.play();
-      this.isPlaying = true;
-      this.fadeIn(0.7, 1800);
+    // If custom URL is set, try playing it; if it fails, activate pristine piano synth
+    if (this.bgmAudio && this.customBgmUrl && !this.customBgmUrl.includes('assets.mixkit.co')) {
+      try {
+        await this.bgmAudio.play();
+        this.fadeIn(0.7, 1800);
+        return true;
+      } catch (err) {
+        console.log('Stream playback failed, starting internal piano synth...', err);
+        this.startRomanticPianoSynth();
+        return true;
+      }
+    } else {
+      // By default or on blocked 403 URLs, start the smooth acoustic piano immediately
+      this.startRomanticPianoSynth();
       return true;
-    } catch (err) {
-      console.log('Audio autoplay awaiting user touch gesture', err);
-      this.isPlaying = false;
-      return false;
     }
   }
 
   public stopAudio() {
     this.isPlaying = false;
+    this.stopRomanticPianoSynth();
     this.fadeOut(700);
   }
 
