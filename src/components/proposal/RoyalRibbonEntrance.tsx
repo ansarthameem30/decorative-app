@@ -67,7 +67,7 @@ export const RoyalRibbonEntrance: React.FC<RoyalRibbonEntranceProps> = ({
           initial={{ opacity: 1 }}
           exit={{ opacity: 0, scale: 1.04, filter: 'blur(10px)' }}
           transition={{ duration: 0.85, ease: [0.16, 1, 0.3, 1] }}
-          className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-[#04010a] select-none overflow-hidden p-4 sm:p-8 text-center"
+          className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-[#04010a] select-none overflow-hidden p-3 sm:p-8 text-center touch-none overscroll-none"
         >
           {/* 1. Cinematic Volumetric Lighting (High-fashion spotlight from above) */}
           <div className="absolute inset-0 pointer-events-none flex items-center justify-center overflow-hidden">
@@ -103,27 +103,27 @@ export const RoyalRibbonEntrance: React.FC<RoyalRibbonEntranceProps> = ({
             initial={{ opacity: 0, y: -16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.9, delay: 0.15 }}
-            className="relative z-20 space-y-3 mb-6 sm:mb-8"
+            className="relative z-20 space-y-2 sm:space-y-3 mb-4 sm:mb-8"
           >
-            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#120422]/90 border border-[#fde68a]/30 shadow-lg backdrop-blur-md">
+            <div className="inline-flex items-center gap-2 px-3 sm:px-4 py-1 sm:py-1.5 rounded-full bg-[#120422]/90 border border-[#fde68a]/30 shadow-lg backdrop-blur-md">
               <span className="w-1.5 h-1.5 rounded-full bg-[#fde68a] shadow-[0_0_6px_#fde68a]" />
-              <span className="font-cinzel text-[10px] sm:text-xs tracking-[0.28em] text-[#fef08a] uppercase font-medium">
+              <span className="font-cinzel text-[9px] sm:text-xs tracking-[0.28em] text-[#fef08a] uppercase font-medium">
                 Private Invitation · Mikrokosmos
               </span>
               <span className="w-1.5 h-1.5 rounded-full bg-[#fde68a] shadow-[0_0_6px_#fde68a]" />
             </div>
 
-            <h1 className="font-display text-4xl sm:text-6xl md:text-7xl font-normal text-white tracking-wide text-glow-blush leading-[1.1] pt-1">
+            <h1 className="font-display text-3xl sm:text-6xl md:text-7xl font-normal text-white tracking-wide text-glow-blush leading-[1.1] pt-1">
               Are you ready to begin?
             </h1>
 
-            <p className="font-display italic text-base sm:text-xl text-purple-200/80 font-light max-w-lg mx-auto px-4 leading-relaxed">
-              For {herName || 'My Love'} — In a universe of seven billion lights, this journey was written only for you.
+            <p className="font-display italic text-sm sm:text-xl text-purple-200/80 font-light max-w-lg mx-auto px-4 leading-relaxed">
+              For {herName || 'My Universe'} — In a universe of seven billion lights, this journey was written only for you.
             </p>
           </motion.div>
 
           {/* 3. The 3D Royal Velvet Keepsake Folio with Silk Ribbon & Imperial Gold Seal */}
-          <div className="relative z-20 w-full max-w-[340px] sm:max-w-[420px] my-2 [perspective:1200px]">
+          <div className="relative z-20 w-full max-w-[320px] sm:max-w-[420px] my-1 sm:my-2 [perspective:1200px]">
             
             {/* Folio Outer Shadow & Ambient Glow */}
             <div className="absolute -inset-2 rounded-3xl bg-gradient-to-tr from-purple-700/20 via-pink-500/10 to-transparent blur-2xl pointer-events-none" />

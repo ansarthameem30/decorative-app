@@ -139,10 +139,10 @@ export const RoyalRingReveal: React.FC<RoyalRingRevealProps> = ({ onSparkleClick
             {/* Center Dark Velvet Ring Slit */}
             <div className="w-20 h-2.5 rounded-full bg-[#05000a] shadow-[inset_0_2px_4px_#000000,0_0_6px_rgba(168,85,247,0.3)] my-auto" />
             
-            {/* BTS Purple Whisper Engraving on Bed */}
+            {/* BTS Inscription on Ring Cushion Bed */}
             <div className="absolute bottom-1.5 text-center">
-              <span className="font-heading text-[8px] tracking-widest uppercase text-pink-300/50">
-                💜 Borahae 7
+              <span className="font-heading text-[8px] tracking-[0.25em] uppercase text-pink-300/60 font-semibold">
+                VII · BORAHAE FOREVER
               </span>
             </div>
           </div>

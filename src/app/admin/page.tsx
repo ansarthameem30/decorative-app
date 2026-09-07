@@ -302,7 +302,7 @@ FROM public.proposal_config;`;
         <div className="flex items-center gap-1.5 sm:gap-2 overflow-x-auto pb-1 -mx-1 px-1 scrollbar-none">
           {[
             { id: 'couple', label: 'Couple & Vows', icon: '💜' },
-            { id: 'milestones', label: 'Milestones & Photos', icon: '📷' },
+            { id: 'milestones', label: 'Chapters & Photos', icon: '📷' },
             { id: 'stars', label: '7 Stars', icon: '⭐' },
             { id: 'reasons', label: 'Love Reasons', icon: '💌' },
             { id: 'sql', label: 'Supabase SQL', icon: '⚡' },
@@ -409,10 +409,27 @@ FROM public.proposal_config;`;
                   placeholder="Personal vow inside the keepsake modal..."
                 />
               </div>
+
+              {/* Entrance Gate Testing Action */}
+              <div className="pt-2">
+                <button
+                  type="button"
+                  onClick={() => {
+                    if (typeof window !== 'undefined') {
+                      localStorage.removeItem('mikrokosmos_unlocked');
+                      window.open('/?entrance=1', '_blank');
+                    }
+                  }}
+                  className="w-full py-2.5 px-4 rounded-xl border border-purple-400/40 bg-purple-950/60 hover:bg-purple-900/60 text-purple-200 text-xs font-heading font-medium tracking-wide flex items-center justify-center gap-2 transition-all active:scale-98"
+                >
+                  <span>✨</span>
+                  <span>Test Entrance Seal Ceremony (Opens Ribbon Page in New Tab)</span>
+                </button>
+              </div>
             </div>
           )}
 
-          {/* TAB 2: Milestones & Local Phone Photos */}
+          {/* TAB 2: Chapters & Local Phone Photos */}
           {activeTab === 'milestones' && (
             <div className="space-y-5">
               <div className="p-3.5 rounded-2xl bg-purple-950/40 border border-purple-400/30">

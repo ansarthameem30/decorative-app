@@ -202,7 +202,7 @@ export const StarlightMiniGame: React.FC<StarlightMiniGameProps> = ({ stars, onC
               </motion.button>
             ) : (
               <span className="font-heading text-xs tracking-wide text-purple-300/80 font-normal">
-                Touch any star in the dome to uncover its memory
+                Touch any star in the dome to illuminate our promise for tomorrow
               </span>
             )}
           </AnimatePresence>
@@ -220,7 +220,9 @@ export const StarlightMiniGame: React.FC<StarlightMiniGameProps> = ({ stars, onC
               className="w-full max-w-lg p-6 sm:p-8 rounded-3xl bg-gradient-to-b from-[#220738] via-[#120422] to-[#080112] border border-pink-400/50 shadow-[0_0_60px_rgba(240,171,252,0.4)] text-center space-y-4"
             >
               <div className="w-14 h-14 rounded-full bg-gradient-to-tr from-purple-600 via-pink-500 to-purple-400 mx-auto flex items-center justify-center shadow-[0_0_20px_#f472b6]">
-                <span className="text-xl">✨</span>
+                <svg className="w-7 h-7 text-white" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M12 2l2.4 7.2L22 12l-7.6 2.8L12 22l-2.4-7.2L2 12l7.6-2.8z" />
+                </svg>
               </div>
 
               <span className="font-heading text-xs tracking-widest text-pink-300 uppercase font-semibold block">
@@ -233,7 +235,7 @@ export const StarlightMiniGame: React.FC<StarlightMiniGameProps> = ({ stars, onC
 
               <div className="p-4 rounded-2xl bg-[#17052a]/80 border border-purple-500/30 text-left space-y-2">
                 <p className="font-display text-base sm:text-lg text-purple-100 italic leading-relaxed">
-                  "In a universe of seven billion souls, gravity chose us. Every star you just touched is a silent promise I made to you—to protect your happiness, to hold your hand through every winter, and to love you until the stars themselves burn out."
+                  "In a universe of seven billion souls, gravity is drawing our paths into one. Every star you just touched is a lifelong promise I dedicate to you—to protect your happiness, to hold your hand through every winter, and to choose you as our tomorrow unfolds."
                 </p>
                 <span className="font-heading text-xs text-pink-300/90 font-medium block pt-1">
                   — Forever Borahae

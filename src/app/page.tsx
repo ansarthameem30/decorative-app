@@ -20,12 +20,61 @@ import { audioEngine } from '@/services/audioEngine';
 export default function ProposalMainPage() {
   const [config, setConfig] = useState<ProposalConfig>(defaultProposalConfig);
   const [isLoading, setIsLoading] = useState(true);
+  const [isClientReady, setIsClientReady] = useState(false);
   const [hasCutRibbon, setHasCutRibbon] = useState(false);
   const [showCelebration, setShowCelebration] = useState(false);
   const [isAudioActive, setIsAudioActive] = useState(false);
 
   const heroRef = useRef<HTMLDivElement | null>(null);
   const storyRef = useRef<HTMLDivElement | null>(null);
+
+  // Check localStorage immediately on client mount so unlocked users never see the ribbon entrance flash
+  useEffect(() => {
+    try {
+      if (typeof window !== 'undefined') {
+        const urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.get('reset') === '1' || urlParams.get('entrance') === '1') {
+          localStorage.removeItem('mikrokosmos_unlocked');
+          setHasCutRibbon(false);
+        } else {
+          const savedUnlocked = localStorage.getItem('mikrokosmos_unlocked');
+          if (savedUnlocked === 'true') {
+            setHasCutRibbon(true);
+          }
+        }
+      }
+    } catch (e) {
+      console.warn('LocalStorage access not available:', e);
+    } finally {
+      setIsClientReady(true);
+    }
+  }, []);
+
+  // Strictly lock viewport and body scroll while entrance seal is active (zero vertical scroll leak!)
+  useEffect(() => {
+    if (!isClientReady) return;
+
+    if (!hasCutRibbon) {
+      document.body.style.overflow = 'hidden';
+      document.body.style.height = '100dvh';
+      document.body.style.touchAction = 'none';
+      document.documentElement.style.overflow = 'hidden';
+      document.documentElement.style.height = '100dvh';
+    } else {
+      document.body.style.overflow = '';
+      document.body.style.height = '';
+      document.body.style.touchAction = '';
+      document.documentElement.style.overflow = '';
+      document.documentElement.style.height = '';
+    }
+    return () => {
+      document.body.style.overflow = '';
+      document.body.style.height = '';
+      document.body.style.touchAction = '';
+      document.documentElement.style.overflow = '';
+      document.documentElement.style.height = '';
+    };
+  }, [hasCutRibbon, isClientReady]);
 
   // Fetch proposal configuration from Supabase via Next.js API
   useEffect(() => {
@@ -66,13 +115,16 @@ export default function ProposalMainPage() {
   };
 
   return (
-    <div className="relative w-full min-h-screen bg-[#05010a] text-[#f8f6fc] overflow-x-hidden selection:bg-purple-600/30 selection:text-purple-100 antialiased">
+    <div className={`relative w-full ${!hasCutRibbon ? 'h-screen h-[100dvh] overflow-hidden' : 'min-h-screen overflow-x-hidden'} bg-[#05010a] text-[#f8f6fc] selection:bg-purple-600/30 selection:text-purple-100 antialiased`}>
       {/* Haute-Couture Royal Ribbon & Gold Imperial Seal Entrance Ceremony */}
-      {!hasCutRibbon && (
+      {isClientReady && !hasCutRibbon && (
         <RoyalRibbonEntrance
           herName={config.herName}
           isLoading={isLoading}
           onOpenComplete={() => {
+            if (typeof window !== 'undefined') {
+              localStorage.setItem('mikrokosmos_unlocked', 'true');
+            }
             setHasCutRibbon(true);
             setIsAudioActive(true);
           }}
@@ -85,37 +137,40 @@ export default function ProposalMainPage() {
       {/* Fluid Swiping Starlight Ribbon Cursor Trail & Touch Particles */}
       <CursorTrail />
 
-      {/* Minimal Luxury Top Bar - ZERO customize/personalize buttons visible! */}
-      <header className="fixed top-3 inset-x-0 z-40 px-4 sm:px-8 flex items-center justify-between pointer-events-none">
-        <span className="pointer-events-auto font-heading text-xs tracking-widest text-purple-200/90 uppercase font-semibold">
-          Our Mikrokosmos
-        </span>
+      {/* Main Proposal Content - ONLY rendered when unlocked so no vertical scroll or below leak can ever occur */}
+      {isClientReady && hasCutRibbon && (
+        <>
+          {/* Minimal Luxury Top Bar - ZERO customize/personalize buttons visible! */}
+          <header className="fixed top-3 inset-x-0 z-40 px-4 sm:px-8 flex items-center justify-between pointer-events-none">
+            <span className="pointer-events-auto font-heading text-xs tracking-widest text-purple-200/90 uppercase font-semibold">
+              Our Mikrokosmos
+            </span>
 
-        {/* Audio Ballad Player */}
-        <button
-          onClick={handleToggleAudio}
-          className="pointer-events-auto flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#120422]/90 hover:bg-[#1c0836] border border-purple-500/30 text-purple-200 text-xs font-heading font-medium tracking-wide backdrop-blur-xl transition-all shadow-lg active:scale-95 touch-manipulation"
-        >
-          {isAudioActive ? (
-            <>
-              <span className="flex items-center gap-0.5">
-                <span className="w-[2px] h-2.5 bg-pink-300 animate-pulse" />
-                <span className="w-[2px] h-3.5 bg-pink-300 animate-pulse delay-75" />
-                <span className="w-[2px] h-2 bg-pink-300 animate-pulse delay-150" />
-              </span>
-              <span className="text-[11px]">Ballad Playing</span>
-            </>
-          ) : (
-            <>
-              <span className="w-1.5 h-1.5 rounded-full bg-purple-400" />
-              <span className="text-[11px]">Play Ballad</span>
-            </>
-          )}
-        </button>
-      </header>
+            {/* Audio Ballad Player */}
+            <button
+              onClick={handleToggleAudio}
+              className="pointer-events-auto flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#120422]/90 hover:bg-[#1c0836] border border-purple-500/30 text-purple-200 text-xs font-heading font-medium tracking-wide backdrop-blur-xl transition-all shadow-lg active:scale-95 touch-manipulation"
+            >
+              {isAudioActive ? (
+                <>
+                  <span className="flex items-center gap-0.5">
+                    <span className="w-[2px] h-2.5 bg-pink-300 animate-pulse" />
+                    <span className="w-[2px] h-3.5 bg-pink-300 animate-pulse delay-75" />
+                    <span className="w-[2px] h-2 bg-pink-300 animate-pulse delay-150" />
+                  </span>
+                  <span className="text-[11px]">Ballad Playing</span>
+                </>
+              ) : (
+                <>
+                  <span className="w-1.5 h-1.5 rounded-full bg-purple-400" />
+                  <span className="text-[11px]">Play Ballad</span>
+                </>
+              )}
+            </button>
+          </header>
 
-      {/* Main Proposal Experience - Complete Multi-Chapter Interactive Narrative */}
-      <main className="relative z-10 w-full flex flex-col">
+          {/* Main Proposal Experience - Complete Multi-Chapter Interactive Narrative */}
+          <main className="relative z-10 w-full flex flex-col">
         {/* Chapter 01: The Luminous Entrance */}
         <div ref={heroRef} className="w-full">
           <ProposalHero
@@ -176,6 +231,8 @@ export default function ProposalMainPage() {
           config={config}
           onClose={() => setShowCelebration(false)}
         />
+      )}
+        </>
       )}
     </div>
   );

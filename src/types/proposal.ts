@@ -21,6 +21,21 @@ export interface GameStar {
   note: string;
 }
 
+export interface ResonanceFrequency {
+  frequency: number;
+  tag: string;
+  title: string;
+  date: string;
+  reflection: string;
+}
+
+export interface ProposalPillar {
+  id: string;
+  title: string;
+  koreanTag: string;
+  description: string;
+}
+
 export interface ProposalConfig {
   herName: string;
   yourName: string;
@@ -33,4 +48,6 @@ export interface ProposalConfig {
   celebrationTitle: string;
   celebrationMessage: string;
   whatsappPhone?: string;
+  resonanceFrequencies?: ResonanceFrequency[];
+  pillars?: ProposalPillar[];
 }

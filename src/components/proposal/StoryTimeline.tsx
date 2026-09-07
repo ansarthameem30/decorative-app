@@ -44,13 +44,13 @@ export const StoryTimeline: React.FC<StoryTimelineProps> = ({ slides }) => {
       {/* Section Header */}
       <div className="text-center max-w-xl mx-auto mb-10 sm:mb-16 px-2">
         <span className="font-heading text-xs tracking-widest text-purple-300 uppercase block mb-1.5 font-medium">
-          Chapter 02 · Milestones of Us
+          Chapter 02 · The Journey Ahead
         </span>
         <h2 className="font-display text-3xl sm:text-5xl md:text-6xl font-normal text-purple-50 text-glow">
-          The Constellation of Our Days
+          The Constellation of Our Tomorrows
         </h2>
         <p className="font-sans text-xs sm:text-sm text-purple-200/70 mt-2 font-normal">
-          Glide through the milestones that led my heart to yours.
+          Glide through the dreams and promises I want to write with you across a lifetime.
         </p>
       </div>
 

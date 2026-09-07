@@ -258,7 +258,9 @@ export const WishingSkySection: React.FC = () => {
               className="w-full max-w-lg p-6 sm:p-8 rounded-3xl bg-gradient-to-b from-[#220738] via-[#120422] to-[#080112] border border-pink-400/50 shadow-[0_0_60px_rgba(240,171,252,0.4)] text-center space-y-4"
             >
               <div className="w-14 h-14 rounded-full bg-gradient-to-tr from-pink-500 to-amber-300 mx-auto flex items-center justify-center shadow-[0_0_20px_#fde68a]">
-                <span className="text-xl">🏮</span>
+                <svg className="w-7 h-7 text-amber-950 drop-shadow-[0_1px_2px_rgba(255,255,255,0.4)]" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M12 2a1 1 0 011 1v1.07A7.002 7.002 0 0119 11v3a2 2 0 01-2 2h-1v2a1 1 0 01-2 0v-2h-4v2a1 1 0 01-2 0v-2H7a2 2 0 01-2-2v-3a7.002 7.002 0 016-6.93V3a1 1 0 011-1zm0 4a5 5 0 00-5 5v3h10v-3a5 5 0 00-5-5z" />
+                </svg>
               </div>
 
               <span className="font-heading text-xs tracking-widest text-pink-300 uppercase font-semibold block">

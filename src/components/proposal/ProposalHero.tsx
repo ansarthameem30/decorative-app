@@ -58,7 +58,7 @@ export const ProposalHero: React.FC<ProposalHeroProps> = ({
           {/* BTS Quote Glass Card */}
           <div className="w-full p-6 sm:p-8 rounded-3xl bg-gradient-to-b from-[#150529]/85 via-[#0e031c]/90 to-[#07010e]/95 border border-purple-400/25 backdrop-blur-2xl shadow-2xl space-y-3">
             <p className="font-display text-base sm:text-xl text-purple-100 italic leading-relaxed font-light">
-              "{config.invitationSubtitle || "In this vast universe of seven billion lights, you are my only Mikrokosmos. Every road, every winter, and every song was leading me to you."}"
+              "{config.invitationSubtitle || "Purple is the last color of the rainbow—a promise that from this very beginning, I will choose you, cherish you, and dream with you for all our tomorrows."}"
             </p>
             <span className="font-heading text-xs tracking-wider text-pink-300 font-medium block pt-1">
               I Purple You · Always and Forever

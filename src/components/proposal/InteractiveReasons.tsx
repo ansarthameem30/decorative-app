@@ -35,10 +35,10 @@ export const InteractiveReasons: React.FC<InteractiveReasonsProps> = ({ reasons 
           Chapter 05 · Inscribed in My Heart
         </span>
         <h2 className="font-display text-3xl sm:text-5xl md:text-6xl font-normal text-purple-50 text-glow">
-          Why It Has Always Been You
+          Why I Choose You For Every Tomorrow
         </h2>
         <p className="font-sans text-xs sm:text-sm text-purple-200/70 mt-2 font-normal">
-          Swipe or tap through the reasons that made my soul choose yours.
+          Swipe through the reasons why I want to build this lifetime with you.
         </p>
       </div>
 

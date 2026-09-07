@@ -17,33 +17,33 @@ const FREQUENCIES: FrequencyTrack[] = [
   {
     id: 'freq-1',
     hz: '432 Hz',
-    title: 'The First Alignment',
-    vow: 'The frequency where two wandering souls synced.',
-    detail: 'Before you, the world was filled with static noise. But the moment you spoke my name, everything fell into place with effortless grace.',
+    title: 'The First Step',
+    vow: 'The frequency where our beginnings unite.',
+    detail: 'As new as we are to this journey, every second spent with you feels like home. I want to spend all our tomorrows discovering every wonderful thing about you.',
     color: '#c084fc',
   },
   {
     id: 'freq-2',
     hz: '528 Hz',
-    title: 'Your Contagious Joy',
-    vow: 'The golden frequency of your laughter.',
-    detail: 'The sound of your unguarded laugh is my favorite melody in the universe. I would spend a hundred lifetimes just to be the one who makes you smile.',
+    title: 'A Lifetime of Laughter',
+    vow: 'The golden frequency of your smile.',
+    detail: 'The sound of your unguarded laugh is my favorite melody in the world. Can we promise to make each other smile and laugh until our cheeks hurt for years to come?',
     color: '#f0abfc',
   },
   {
     id: 'freq-3',
     hz: '639 Hz',
-    title: 'The Safe Harbor',
-    vow: 'The warmth that outlasts every winter.',
-    detail: 'Like cherry blossoms enduring the cold snow, we stood strong through every season. In your arms, I have found my only true shelter.',
+    title: 'Our Unshakable Shelter',
+    vow: 'The warmth that will outlast every winter ahead.',
+    detail: 'Through sunny days, quiet autumns, and every cold winter ahead, I promise to be your steady anchor. Can we be each other\'s calm in every storm?',
     color: '#d8b4fe',
   },
   {
     id: 'freq-4',
     hz: '852 Hz',
-    title: 'Our Mikrokosmos',
-    vow: 'The vow written across seven billion stars.',
-    detail: 'Out of seven billion lights on this earth, you remain my only fixed constellation. In you, forever has finally found its home.',
+    title: 'Our Future Mikrokosmos',
+    vow: 'A vow for all our tomorrows.',
+    detail: 'In a cosmos of seven billion lights, you are the only one I want to build a life with. Can we take this step together into our forever?',
     color: '#fbcfe8',
   },
 ];
@@ -70,13 +70,13 @@ export const MemoryResonance: React.FC = () => {
       {/* Header */}
       <div className="text-center max-w-xl mx-auto mb-10 sm:mb-16 px-2">
         <span className="font-heading text-xs tracking-widest text-purple-300 uppercase block mb-1.5 font-medium">
-          Chapter 06 · The Memory Resonance
+          Chapter 06 · The Harmony of Tomorrow
         </span>
         <h2 className="font-display text-3xl sm:text-5xl md:text-6xl font-normal text-purple-50 text-glow">
-          The Frequency of Us
+          The Frequency of Our Future
         </h2>
         <p className="font-sans text-xs sm:text-sm text-purple-200/70 mt-2 font-normal">
-          Touch each harmonic frequency to tune into the sacred moments of our love.
+          Touch each harmonic frequency to discover the promises I want to make for our lifetime ahead.
         </p>
       </div>
 
