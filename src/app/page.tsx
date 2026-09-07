@@ -1,0 +1,182 @@
+'use client';
+
+import React, { useState, useEffect, useRef } from 'react';
+import { ParticleField } from '@/components/shared/ParticleField';
+import { CursorTrail } from '@/components/shared/CursorTrail';
+import { ProposalHero } from '@/components/proposal/ProposalHero';
+import { StoryTimeline } from '@/components/proposal/StoryTimeline';
+import { StarlightMiniGame } from '@/components/proposal/StarlightMiniGame';
+import { WishingSkySection } from '@/components/proposal/WishingSkySection';
+import { InteractiveReasons } from '@/components/proposal/InteractiveReasons';
+import { MemoryResonance } from '@/components/proposal/MemoryResonance';
+import { PillarsOfTomorrow } from '@/components/proposal/PillarsOfTomorrow';
+import { ProposalQuestion } from '@/components/proposal/ProposalQuestion';
+import { CelebrationModal } from '@/components/proposal/CelebrationModal';
+import { RoyalRibbonEntrance } from '@/components/proposal/RoyalRibbonEntrance';
+import { defaultProposalConfig } from '@/config/proposalContent';
+import { ProposalConfig } from '@/types/proposal';
+import { audioEngine } from '@/services/audioEngine';
+
+export default function ProposalMainPage() {
+  const [config, setConfig] = useState<ProposalConfig>(defaultProposalConfig);
+  const [isLoading, setIsLoading] = useState(true);
+  const [hasCutRibbon, setHasCutRibbon] = useState(false);
+  const [showCelebration, setShowCelebration] = useState(false);
+  const [isAudioActive, setIsAudioActive] = useState(false);
+
+  const heroRef = useRef<HTMLDivElement | null>(null);
+  const storyRef = useRef<HTMLDivElement | null>(null);
+
+  // Fetch proposal configuration from Supabase via Next.js API
+  useEffect(() => {
+    async function fetchConfig() {
+      const startTime = performance.now();
+      try {
+        const res = await fetch('/api/config');
+        const data = await res.json();
+        if (data.config) {
+          setConfig(data.config);
+        }
+      } catch (err) {
+        console.warn('Could not fetch from API, using default content:', err);
+      } finally {
+        // Enforce minimum 1.2s for adorable theatrical loader animation
+        const elapsed = performance.now() - startTime;
+        const remaining = Math.max(0, 1200 - elapsed);
+        setTimeout(() => {
+          setIsLoading(false);
+        }, remaining);
+      }
+    }
+
+    fetchConfig();
+  }, []);
+
+  const handleExploreStory = () => {
+    storyRef.current?.scrollIntoView({ behavior: 'smooth' });
+  };
+
+  const handleSayYes = () => {
+    setShowCelebration(true);
+  };
+
+  const handleToggleAudio = () => {
+    const active = audioEngine.toggleAudio();
+    setIsAudioActive(active);
+  };
+
+  return (
+    <div className="relative w-full min-h-screen bg-[#05010a] text-[#f8f6fc] overflow-x-hidden selection:bg-purple-600/30 selection:text-purple-100 antialiased">
+      {/* Haute-Couture Royal Ribbon & Gold Imperial Seal Entrance Ceremony */}
+      {!hasCutRibbon && (
+        <RoyalRibbonEntrance
+          herName={config.herName}
+          isLoading={isLoading}
+          onOpenComplete={() => {
+            setHasCutRibbon(true);
+            setIsAudioActive(true);
+          }}
+        />
+      )}
+
+      {/* Dynamic Interactive Volumetric Cosmos Background */}
+      <ParticleField />
+
+      {/* Fluid Swiping Starlight Ribbon Cursor Trail & Touch Particles */}
+      <CursorTrail />
+
+      {/* Minimal Luxury Top Bar - ZERO customize/personalize buttons visible! */}
+      <header className="fixed top-3 inset-x-0 z-40 px-4 sm:px-8 flex items-center justify-between pointer-events-none">
+        <span className="pointer-events-auto font-heading text-xs tracking-widest text-purple-200/90 uppercase font-semibold">
+          Our Mikrokosmos
+        </span>
+
+        {/* Audio Ballad Player */}
+        <button
+          onClick={handleToggleAudio}
+          className="pointer-events-auto flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#120422]/90 hover:bg-[#1c0836] border border-purple-500/30 text-purple-200 text-xs font-heading font-medium tracking-wide backdrop-blur-xl transition-all shadow-lg active:scale-95 touch-manipulation"
+        >
+          {isAudioActive ? (
+            <>
+              <span className="flex items-center gap-0.5">
+                <span className="w-[2px] h-2.5 bg-pink-300 animate-pulse" />
+                <span className="w-[2px] h-3.5 bg-pink-300 animate-pulse delay-75" />
+                <span className="w-[2px] h-2 bg-pink-300 animate-pulse delay-150" />
+              </span>
+              <span className="text-[11px]">Ballad Playing</span>
+            </>
+          ) : (
+            <>
+              <span className="w-1.5 h-1.5 rounded-full bg-purple-400" />
+              <span className="text-[11px]">Play Ballad</span>
+            </>
+          )}
+        </button>
+      </header>
+
+      {/* Main Proposal Experience - Complete Multi-Chapter Interactive Narrative */}
+      <main className="relative z-10 w-full flex flex-col">
+        {/* Chapter 01: The Luminous Entrance */}
+        <div ref={heroRef} className="w-full">
+          <ProposalHero
+            config={config}
+            onExploreStory={handleExploreStory}
+          />
+        </div>
+
+        {/* Chapter 02: Horizontal Sliding Memory Reel (Zero Browser Scrollbars) */}
+        <div ref={storyRef} className="w-full">
+          <StoryTimeline
+            slides={config.storySlides}
+          />
+        </div>
+
+        {/* Chapter 03: 7-Stars Constellation Quest (Touch overlap fixed!) */}
+        <div className="w-full">
+          <StarlightMiniGame
+            stars={config.gameStars}
+            onComplete={() => audioEngine.playStarGlimmer()}
+          />
+        </div>
+
+        {/* Chapter 04: The Wishing Sky & Starlight Lanterns (Touch overlap fixed!) */}
+        <div className="w-full">
+          <WishingSkySection />
+        </div>
+
+        {/* Chapter 05: One-by-One Interactive Love Reasons */}
+        <div className="w-full">
+          <InteractiveReasons
+            reasons={config.reasons}
+          />
+        </div>
+
+        {/* Chapter 06: [NEW] Memory Resonance & Frequency Tuner */}
+        <div className="w-full">
+          <MemoryResonance />
+        </div>
+
+        {/* Chapter 07: [NEW] The Pillars of Our Tomorrow */}
+        <div className="w-full">
+          <PillarsOfTomorrow />
+        </div>
+
+        {/* Chapter 08: The Grand Proposal & Tiffany 3D Solitaire Diamond Ring */}
+        <div className="w-full">
+          <ProposalQuestion
+            config={config}
+            onSayYes={handleSayYes}
+          />
+        </div>
+      </main>
+
+      {/* Celebration Supernova Modal */}
+      {showCelebration && (
+        <CelebrationModal
+          config={config}
+          onClose={() => setShowCelebration(false)}
+        />
+      )}
+    </div>
+  );
+}
